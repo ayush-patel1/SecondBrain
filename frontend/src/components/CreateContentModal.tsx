@@ -1,12 +1,37 @@
 import CrossIcon from "../icons/CrossIcon";
 import Button from "./Button";
+import { useRef,useState} from "react";
 import { Input } from "./Input";
+import axios from "axios";
+import { BACKEND_URL } from "../../config";
+
 type CreateContentModalProps = {
   open: boolean;
   onClose: () => void;
 };
 
+enum ContentType{
+  Youtube="youtube",
+  Twitter="twitter"
+}
+
 function CreateContentModal({ open, onClose }: CreateContentModalProps) {
+  const titleRef=useRef<HTMLInputElement>();
+  const linkRef=useRef<HTMLInputElement>();
+  const [type,setType]=useState(ContentType.Youtube);
+
+  async function addContent(){
+     const title=titleRef.current?.value;
+     const link=titleRef.current?.value;
+     await axios.post(`${BACKEND_URL}/api/v1/content`,{
+      link,title,type
+     },{
+      headers:{
+        "Authorization":localStorage.getItem("token")
+      }
+     })
+  }
+
   return (
     <div>
       {open && (
@@ -22,11 +47,16 @@ function CreateContentModal({ open, onClose }: CreateContentModalProps) {
               </div>
             </div>
             <div>
-              <Input placeholder={"Title"} onChange={() => { }} />
-              <Input placeholder={"Link"} onChange={() => { }} />
+              <Input placeholder={"Title"} reference={titleRef}/>
+              <Input placeholder={"Link"} reference={linkRef}/>
+            </div>
+            <h1 className="pl-3">Select Type:</h1>
+            <div className="flex p-2 gap-2">
+              <Button text="Youtube" variant={type===ContentType.Youtube?"primary":"secondary"} onClick={()=>setType(ContentType.Youtube)}/>
+              <Button text="Twitter" variant={type===ContentType.Twitter?"primary":"secondary"} onClick={()=>setType(ContentType.Twitter)}/>
             </div>
             <div className="flex justify-center mt-4">
-              <Button variant="primary" text="Submit" />
+              <Button onClick={addContent} variant="primary" text="Submit" />
             </div>
           </div>
         </div>
