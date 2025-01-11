@@ -22,7 +22,7 @@ function CreateContentModal({ open, onClose }: CreateContentModalProps) {
 
   async function addContent(){
      const title=titleRef.current?.value;
-     const link=titleRef.current?.value;
+     const link=linkRef.current?.value;
      await axios.post(`${BACKEND_URL}/api/v1/content`,{
       link,title,type
      },{
@@ -30,6 +30,8 @@ function CreateContentModal({ open, onClose }: CreateContentModalProps) {
         "Authorization":localStorage.getItem("token")
       }
      })
+
+     onClose();
   }
 
   return (

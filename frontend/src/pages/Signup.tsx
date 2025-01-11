@@ -27,7 +27,7 @@ function Signup() {
                     <Input placeholder="Password" reference={passwordRef} />
                 </div>
                 <div className="flex justify-center pt-4">
-                    <Button variant="primary" text="Signup" fullWidth={true} loading={false} />
+                    <Button onClick={signup} variant="primary" text="Signup" fullWidth={true} loading={false} />
                 </div>
             </div>
         </div>
